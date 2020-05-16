@@ -3,6 +3,8 @@
  * Copyright (C) 2018, STMicroelectronics - All Rights Reserved
  */
 
+#define DEBUG
+
 #include <common.h>
 #include <dm.h>
 #include <hang.h>

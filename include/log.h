@@ -172,6 +172,8 @@ static inline int _log_nop(enum log_category_t cat, enum log_level_t level,
 
 #else /* _DEBUG */
 
+extern ulong timer_get_boot_us(void);
+
 /*
  * Output a debug text when condition "cond" is met. The "cond" should be
  * computed by a preprocessor in the best case, allowing for the best
@@ -179,8 +181,9 @@ static inline int _log_nop(enum log_category_t cat, enum log_level_t level,
  */
 #define debug_cond(cond, fmt, args...)			\
 	do {						\
-		if (cond)				\
-			printf(pr_fmt(fmt), ##args);	\
+		if (cond) {				\
+			printf(pr_fmt("[%lu] "), timer_get_boot_us());	\
+			printf(pr_fmt(fmt), ##args);}	\
 	} while (0)
 
 #endif /* _DEBUG */
