@@ -12,6 +12,8 @@
 #include <fdtdec.h>
 #include <micrel.h>
 #include <phy.h>
+#include <clk.h>
+#include <linux/err.h>
 
 static struct phy_driver KSZ804_driver = {
 	.name = "Micrel KSZ804",
@@ -58,6 +60,8 @@ static struct phy_driver KSZ8031_driver = {
  */
 #define MII_KSZ8051_PHY_OMSO			0x16
 #define MII_KSZ8051_PHY_OMSO_NAND_TREE_ON	(1 << 5)
+#define MII_KSZ8051_PHY_CTRL_2 0x1f
+#define MII_KSZ8051_PHY_CTRL_2_REF_CLK_SEL BIT(7)
 
 static int ksz8051_config(struct phy_device *phydev)
 {
@@ -84,6 +88,15 @@ static struct phy_driver KSZ8051_driver = {
 static int ksz8081_config(struct phy_device *phydev)
 {
 	int ret;
+
+	ret = phy_read(phydev, MDIO_DEVAD_NONE, MII_KSZ8051_PHY_CTRL_2);
+	if (ret < 0)
+		return ret;
+
+	ret = phy_write(phydev, MDIO_DEVAD_NONE, MII_KSZ8051_PHY_CTRL_2,
+					ret | MII_KSZ8051_PHY_CTRL_2_REF_CLK_SEL);
+	if (ret < 0)
+		return ret;
 
 	ret = phy_read(phydev, MDIO_DEVAD_NONE, MII_KSZPHY_OMSO);
 	if (ret < 0)

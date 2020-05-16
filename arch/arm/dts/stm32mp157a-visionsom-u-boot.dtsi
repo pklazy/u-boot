@@ -1,0 +1,125 @@
+// SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause
+/*
+ * Copyright : STMicroelectronics 2018
+ */
+
+#include <dt-bindings/clock/stm32mp1-clksrc.h>
+#include "stm32mp157-u-boot.dtsi"
+#include "stm32mp15-mx.dtsi"
+#include "stm32mp15-ddr.dtsi"
+
+/ {
+	aliases {
+		mmc0 = &sdmmc1;
+	};
+};
+
+&clk_hse {
+	st,digbypass;
+};
+
+&rcc {
+	st,clksrc = <
+		CLK_MPU_PLL1P
+		CLK_AXI_PLL2P
+		CLK_MCU_PLL3P
+		CLK_PLL12_HSE
+		CLK_PLL3_HSE
+		CLK_PLL4_HSE
+		CLK_RTC_LSE
+		CLK_MCO1_DISABLED
+		CLK_MCO2_DISABLED
+	>;
+
+	st,clkdiv = <
+		1 		/*MPU*/
+		0 		/*AXI*/
+		0 		/*MCU*/
+		1 		/*APB1*/
+		1 		/*APB2*/
+		1 		/*APB3*/
+		1 		/*APB4*/
+		2 		/*APB5*/
+		0 		/*RTC*/
+		0 		/*MCO1*/
+		0 		/*MCO2*/
+	>;
+
+	st,pkcs = <
+		CLK_CKPER_DISABLED
+		CLK_ETH_PLL4P
+		CLK_SDMMC12_HCLK6
+		CLK_STGEN_HSE
+		CLK_USBPHY_DISABLED
+		CLK_SPI2S1_DISABLED
+		CLK_SPI2S23_DISABLED
+		CLK_SPI45_DISABLED
+		CLK_SPI6_DISABLED
+		CLK_I2C46_DISABLED
+		CLK_SDMMC3_DISABLED
+		CLK_ADC_DISABLED
+		CLK_CEC_DISABLED
+		CLK_I2C12_DISABLED
+		CLK_I2C35_DISABLED
+		CLK_UART1_DISABLED
+		CLK_UART24_PCLK1
+		CLK_UART35_DISABLED
+		CLK_UART6_DISABLED
+		CLK_UART78_DISABLED
+		CLK_SPDIF_DISABLED
+		CLK_SAI1_DISABLED
+		CLK_SAI2_DISABLED
+		CLK_SAI3_DISABLED
+		CLK_SAI4_DISABLED
+		CLK_LPTIM1_DISABLED
+		CLK_LPTIM23_DISABLED
+		CLK_LPTIM45_DISABLED
+	>;
+
+	pll1:st,pll@0 {
+		cfg = < 2 99 0 1 1 PQR(1,0,0) >;
+		u-boot,dm-pre-reloc;
+	};
+	pll2:st,pll@1 {
+		cfg = < 2 99 3 1 1 PQR(1,0,1) >;
+		u-boot,dm-pre-reloc;
+	};
+	pll3:st,pll@2 {
+		cfg = < 2 49 1 4 1 PQR(1,0,0) >;
+		u-boot,dm-pre-reloc;
+	};
+	pll4:st,pll@3 {
+		cfg = < 1 49 11 1 1 PQR(1,0,0) >;
+		u-boot,dm-pre-reloc;
+	};
+};
+
+&sdmmc1 {
+	u-boot,dm-spl;
+};
+
+&sdmmc1_pins_mx {
+	u-boot,dm-spl;
+	pins1 {
+		u-boot,dm-spl;
+	};
+	pins2 {
+		u-boot,dm-spl;
+	};
+};
+
+&uart4 {
+	u-boot,dm-pre-reloc;
+};
+
+&uart4_pins_a {
+	u-boot,dm-pre-reloc;
+	pins1 {
+		u-boot,dm-pre-reloc;
+	};
+	pins2 {
+		u-boot,dm-pre-reloc;
+		/* pull-up on rx to avoid floating level */
+		bias-pull-up;
+	};
+};
